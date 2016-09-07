@@ -29,17 +29,19 @@
 - (void)viewDidLoad {
     self.view.backgroundColor = [UIColor colorWithRed:0.79 green:0.85 blue:0.97 alpha:1.0];
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 60, self.view.frame.size.width - 40, self.view.frame.size.width - 40)];
+    self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.post.imageUrl]]]];
+    self.imageView.center = CGPointMake(self.view.frame.size.width / 2, 140);
     [self.view addSubview:self.imageView];
     
-    self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.view.frame.size.width + 20, self.view.frame.size.width - 40, self.view.frame.size.height - self.view.frame.size.width - 80)];
+    self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.view.frame.size.width - 40, self.view.frame.size.height - 180)];
     self.messageLabel.numberOfLines = 0;
+    if (self.post.message) {
+        self.messageLabel.text = self.post.message;
+    } else {
+        self.messageLabel.text = self.post.story;
+    }
     [self.view addSubview:self.messageLabel];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    self.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.post.imageUrl]]];
-    self.messageLabel.text = self.post.message;
+    
 }
 
 @end
