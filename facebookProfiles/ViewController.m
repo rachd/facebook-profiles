@@ -12,7 +12,7 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 @import WebKit;
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, FBSDKLoginButtonDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *posts;
@@ -29,6 +29,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:0.79 green:0.85 blue:0.97 alpha:1.0];
     
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    loginButton.delegate = self;
     loginButton.readPermissions = @[@"email", @"public_profile", @"user_likes", @"user_posts"];
     // Optional: Place the button in the center of your view.
     loginButton.center = CGPointMake(self.view.frame.size.width / 2, 87);
@@ -53,7 +54,6 @@
                  if (!error) {
                      self.aboutMe = @[[result objectForKey:@"name"], [result objectForKey:@"email"], [result objectForKey:@"gender"]];
                      self.imageUrl = [[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"];
-                     NSLog(@"%@", result);
                      [self.tableView reloadData];
                      
                  }
@@ -63,7 +63,6 @@
                  //process posts information
                  if (!error) {
                      self.posts = [result objectForKey:@"data"];
-                     NSLog(@"posts: %@", result);
                      [self.tableView reloadData];
         
                  }
@@ -71,6 +70,20 @@
         [connection start];
     }
 }
+
+//Login Button Methods
+- (void)loginButtonDidLogOut:(FBSDKLoginButton *)loginButton {
+    self.posts = @[];
+    self.aboutMe = @[];
+    self.imageUrl = @"";
+    [self.tableView reloadData];
+}
+
+- (void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
+    [self.tableView reloadData];
+}
+
+//Table Delegate Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
