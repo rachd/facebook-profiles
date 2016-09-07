@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @interface AppDelegate ()
@@ -20,6 +21,13 @@
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    ViewController *rootVC = [[ViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:rootVC];
+    [self.window setRootViewController:navController];
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 

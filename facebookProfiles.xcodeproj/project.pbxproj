@@ -16,7 +16,8 @@
 		CC5808D01D7E44E10017FBF0 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5808CD1D7E44E10017FBF0 /* FBSDKCoreKit.framework */; };
 		CC5808D11D7E44E10017FBF0 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5808CE1D7E44E10017FBF0 /* FBSDKLoginKit.framework */; };
 		CC5808D21D7E44E10017FBF0 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5808CF1D7E44E10017FBF0 /* FBSDKShareKit.framework */; };
-		CC5808D51D7E5D7C0017FBF0 /* ProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5808D41D7E5D7C0017FBF0 /* ProfileTableViewController.m */; };
+		CCC9CED01D7FB4A800198210 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC9CECF1D7FB4A800198210 /* Post.m */; };
+		CCC9CED31D7FB57200198210 /* PostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC9CED21D7FB57200198210 /* PostViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +34,10 @@
 		CC5808CD1D7E44E10017FBF0 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		CC5808CE1D7E44E10017FBF0 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		CC5808CF1D7E44E10017FBF0 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../../../Documents/FacebookSDKs-iOS-4.15.0/FBSDKShareKit.framework"; sourceTree = "<group>"; };
-		CC5808D31D7E5D7C0017FBF0 /* ProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileTableViewController.h; sourceTree = "<group>"; };
-		CC5808D41D7E5D7C0017FBF0 /* ProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTableViewController.m; sourceTree = "<group>"; };
+		CCC9CECE1D7FB4A800198210 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		CCC9CECF1D7FB4A800198210 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		CCC9CED11D7FB57200198210 /* PostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostViewController.h; sourceTree = "<group>"; };
+		CCC9CED21D7FB57200198210 /* PostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +78,10 @@
 				CC5808B91D7E2FB50017FBF0 /* AppDelegate.m */,
 				CC5808BB1D7E2FB50017FBF0 /* ViewController.h */,
 				CC5808BC1D7E2FB50017FBF0 /* ViewController.m */,
-				CC5808D31D7E5D7C0017FBF0 /* ProfileTableViewController.h */,
-				CC5808D41D7E5D7C0017FBF0 /* ProfileTableViewController.m */,
+				CCC9CED11D7FB57200198210 /* PostViewController.h */,
+				CCC9CED21D7FB57200198210 /* PostViewController.m */,
+				CCC9CECE1D7FB4A800198210 /* Post.h */,
+				CCC9CECF1D7FB4A800198210 /* Post.m */,
 				CC5808BE1D7E2FB50017FBF0 /* Main.storyboard */,
 				CC5808C11D7E2FB50017FBF0 /* Assets.xcassets */,
 				CC5808C31D7E2FB50017FBF0 /* LaunchScreen.storyboard */,
@@ -174,10 +179,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCC9CED01D7FB4A800198210 /* Post.m in Sources */,
 				CC5808BD1D7E2FB50017FBF0 /* ViewController.m in Sources */,
+				CCC9CED31D7FB57200198210 /* PostViewController.m in Sources */,
 				CC5808BA1D7E2FB50017FBF0 /* AppDelegate.m in Sources */,
 				CC5808B71D7E2FB50017FBF0 /* main.m in Sources */,
-				CC5808D51D7E5D7C0017FBF0 /* ProfileTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +334,7 @@
 				CC5808CB1D7E2FB50017FBF0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

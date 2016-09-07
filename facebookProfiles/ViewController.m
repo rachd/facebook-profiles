@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "PostViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 @import WebKit;
@@ -14,9 +15,9 @@
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSDictionary *data;
 @property (nonatomic, strong) NSArray *posts;
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSArray *aboutMe;
+@property (nonatomic, strong) NSString *imageUrl;
 
 @end
     
@@ -24,31 +25,35 @@
     
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:0.79 green:0.85 blue:0.97 alpha:1.0];
+    
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.readPermissions = @[@"email", @"public_profile", @"user_posts"];
+    loginButton.readPermissions = @[@"email", @"public_profile", @"user_likes", @"user_posts"];
     // Optional: Place the button in the center of your view.
-    loginButton.center = CGPointMake(self.view.frame.size.width / 2, 60);
+    loginButton.center = CGPointMake(self.view.frame.size.width / 2, 87);
     [self.view addSubview:loginButton];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.height - 100) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 110, self.view.frame.size.width, self.view.frame.size.height - 110) style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"user_posts"]) {
+    if ([FBSDKAccessToken currentAccessToken]) {
         FBSDKGraphRequest *requestMe = [[FBSDKGraphRequest alloc]
-                                        initWithGraphPath:@"me" parameters:nil];
+                                        initWithGraphPath:@"me" parameters:@{@"fields": @"name,email,gender,picture"}];
         FBSDKGraphRequest *requestPosts = [[FBSDKGraphRequest alloc]
-                                           initWithGraphPath:@"me/posts" parameters:nil];
+                                           initWithGraphPath:@"me/posts" parameters:@{@"fields" : @"created_time,message,picture,story,link"}];
         FBSDKGraphRequestConnection *connection = [[FBSDKGraphRequestConnection alloc] init];
         [connection addRequest:requestMe
              completionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                  //process me information
                  if (!error) {
-                     self.name = [NSString stringWithFormat:@"%@", [result objectForKey:@"name"]];
-                     NSLog(@"me: %@", self.name);
+                     self.aboutMe = @[[result objectForKey:@"name"], [result objectForKey:@"email"], [result objectForKey:@"gender"]];
+                     self.imageUrl = [[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"];
+                     NSLog(@"%@", result);
                      [self.tableView reloadData];
                      
                  }
@@ -58,7 +63,7 @@
                  //process posts information
                  if (!error) {
                      self.posts = [result objectForKey:@"data"];
-                     NSLog(@"posts: %lu", (unsigned long)self.posts.count);
+                     NSLog(@"posts: %@", result);
                      [self.tableView reloadData];
         
                  }
@@ -68,15 +73,15 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case 0:
-            return @"Name";
-            break;
         case 1:
+            return @"About Me";
+            break;
+        case 2:
             return @"Posts";
             break;
         default:
@@ -91,6 +96,9 @@
             return 1;
             break;
         case 1:
+            return self.aboutMe.count;
+            break;
+        case 2:
             return self.posts.count;
         default:
             return 0;
@@ -101,13 +109,52 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     if (cell) {
-        if (indexPath.section == 0) {
-            cell.textLabel.text = self.name;
-        } else {
-            cell.textLabel.text = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"message"];
+        switch (indexPath.section) {
+            case 0:
+                if (true) {
+                    UIImageView *profileImageView = [[UIImageView alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.imageUrl]]]];
+                    profileImageView.center = CGPointMake(cell.frame.size.width / 2, cell.frame.size.height / 2 + 8);
+                    [cell addSubview:profileImageView];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                break;
+            case 1:
+                cell.textLabel.text = [self.aboutMe objectAtIndex:indexPath.row];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                break;
+            case 2:
+                if (true) {
+                    cell.textLabel.text = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"message"];
+                    NSString *imageUrl = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"picture"];
+                    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+                }
+                break;
+            default:
+                break;
         }
     }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2) {
+        NSDictionary *postInfo = [self.posts objectAtIndex:indexPath.row];
+        Post *post = [[Post alloc] initWithDate:[[postInfo objectForKey:@"created_time"] substringToIndex:11]
+                                          image:[postInfo objectForKey:@"picture"]
+                                          story:[postInfo objectForKey:@"story"]
+                                        message:[postInfo objectForKey:@"message"]];
+        PostViewController *postVC = [[PostViewController alloc] initWithPost:post];
+        [self.navigationController pushViewController:postVC animated:YES];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return 60;
+    } else {
+        return 44;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
