@@ -124,9 +124,8 @@
                 break;
             case 2:
                 if (true) {
-                    cell.textLabel.text = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"message"];
-                    NSString *imageUrl = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"picture"];
-                    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]]];
+                    NSString *time = [[self.posts objectAtIndex:indexPath.row] objectForKey:@"created_time"];
+                    cell.textLabel.text = [time substringToIndex:10];
                 }
                 break;
             default:
